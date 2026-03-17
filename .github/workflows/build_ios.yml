@@ -34,6 +34,9 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
+    - name: Run code generation
+      run: flutter pub run build_runner build --delete-conflicting-outputs
+
     - name: Create iOS project if missing
       run: |
         if [ ! -d "ios/Runner.xcodeproj" ]; then
