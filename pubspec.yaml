@@ -48,7 +48,7 @@ dependencies:
 
   # JSON 处理
   json_annotation: ^4.8.1
-  json_path: ^0.9.0
+  json_path: ^0.7.0
 
   # JavaScript 引擎
   flutter_js: ^0.8.5
