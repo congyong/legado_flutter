@@ -41,7 +41,7 @@ jobs:
           flutter create . --platforms ios
         fi
         # Update iOS minimum version for mobile_scanner
-        sed -i '' 's/# platform :ios, .*/platform :ios, '"'"'14.0'"'"'/g' ios/Podfile 2>/dev/null || echo "platform :ios, '14.0'" > ios/Podfile
+        sed -i '' 's/# platform :ios, .*/platform :ios, '"'"'15.5'"'"'/g' ios/Podfile 2>/dev/null || echo "platform :ios, '15.5'" > ios/Podfile
         cat ios/Podfile | head -5
 
     - name: Build iOS (device, no codesign)
