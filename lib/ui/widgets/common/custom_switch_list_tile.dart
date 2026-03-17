@@ -32,7 +32,7 @@ class CustomSwitchListTile extends StatelessWidget {
   final bool dense;
 
   /// 是否启用视觉密度
-  final bool? isThreeLine;
+  final bool isThreeLine;
 
   /// 是否选中（用于主题）
   final bool? selected;
@@ -53,7 +53,7 @@ class CustomSwitchListTile extends StatelessWidget {
   final FocusNode? focusNode;
 
   /// 是否可聚焦
-  final bool? enableFeedback;
+  final bool enableFeedback;
 
   const CustomSwitchListTile({
     super.key,
