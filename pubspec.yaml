@@ -26,8 +26,8 @@ dependencies:
 
   # 状态管理
   provider: ^6.1.1
-  riverpod: ^3.0.3
-  flutter_riverpod: ^3.0.3
+  riverpod: ^2.4.9
+  flutter_riverpod: ^2.4.9
 
   # 数据库
   sqflite: ^2.3.0
