@@ -31,7 +31,7 @@ dependencies:
 
   # 数据库
   sqflite: ^2.3.0
-  path: ^1.8.3
+  path: ^1.9.0
 
   # 网络请求
   dio: ^5.4.0
@@ -77,7 +77,7 @@ dependencies:
   get_storage: ^2.1.1
 
   # 工具类
-  intl: ^0.20.2
+  intl: ^0.19.0
   url_launcher: ^6.2.2
   package_info_plus: ^9.0.0
   device_info_plus: ^12.3.0
@@ -126,7 +126,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: ^5.0.0
   build_runner: ^2.4.7
   json_serializable: ^6.7.1
   freezed: ^3.2.3

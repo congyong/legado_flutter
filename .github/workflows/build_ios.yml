@@ -1,0 +1,102 @@
+name: Build iOS IPA for Sideloadly
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.0'
+        channel: 'stable'
+
+    - name: Get version from pubspec
+      id: get_version
+      run: |
+        VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //' | sed 's/+.*//')
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "version=$VERSION"
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Build iOS (device, no codesign)
+      run: flutter build ios --release --no-codesign
+
+    - name: Create IPA
+      id: create_ipa
+      run: |
+        # Create Payload directory
+        mkdir -p Payload
+        # Copy the app bundle from device build (arm64 for real iPhone)
+        cp -r build/ios/iphoneos/Runner.app Payload/
+        # Create IPA zip with version
+        IPA_NAME="legado_flutter_v${{ steps.get_version.outputs.VERSION }}.ipa"
+        zip -r "$IPA_NAME" Payload
+        # Clean up
+        rm -rf Payload
+        echo "ipa_name=$IPA_NAME" >> $GITHUB_OUTPUT
+        echo "Created IPA: $IPA_NAME"
+        ls -lh "$IPA_NAME"
+
+    - name: Upload IPA artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: legado-ios-ipa-${{ steps.get_version.outputs.VERSION }}
+        path: ${{ steps.create_ipa.outputs.ipa_name }}
+
+    - name: Create Release
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ steps.create_ipa.outputs.ipa_name }}
+        name: "Legado Flutter v${{ steps.get_version.outputs.VERSION }}"
+        tag_name: "v${{ steps.get_version.outputs.VERSION }}"
+        draft: false
+        prerelease: false
+        generate_release_notes: true
+        body: |
+          ## Legado Flutter (开源阅读) iOS Build v${{ steps.get_version.outputs.VERSION }}
+          
+          ### 📲 安装说明
+          - 此 IPA 为真机无签名版本 (arm64)
+          - 需要使用 AltStore、Sideloadly 或 TrollStore 等工具签名安装
+          
+          ### 🔧 推荐安装工具
+          - **[AltStore](https://altstore.io/)** - 免费，7天续签，支持自动续签
+          - **[Sideloadly](https://sideloadly.io/)** - 免费，7天续签
+          - **TrollStore** - 永久签名（需越狱或特定条件）
+          
+          ### 📖 安装步骤 (Sideloadly)
+          1. 下载此 IPA 文件
+          2. 安装 [Sideloadly](https://sideloadly.io/) 到电脑
+          3. iPhone 连接电脑，打开 Sideloadly
+          4. 拖入 IPA 文件，输入 Apple ID
+          5. 点击开始安装
+          6. iPhone 上信任证书：设置 → 通用 → VPN与设备管理 → 信任开发者
+          
+          ### ⚠️ 注意事项
+          - 免费 Apple ID 签名的应用 **7天后需要重新签名**
+          - 建议使用 AltStore 配合自动续签功能
+          - 如遇闪退，请检查是否已信任证书
+          
+          ### 🏗️ 构建信息
+          - Flutter 版本: 3.27.0
+          - 构建时间: ${{ github.event.head_commit.timestamp }}
+          - 提交: ${{ github.sha }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
