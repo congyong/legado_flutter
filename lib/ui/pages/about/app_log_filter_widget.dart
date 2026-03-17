@@ -54,7 +54,7 @@ class AppLogFilterWidget extends StatelessWidget {
               // 级别筛选
               Expanded(
                 child: DropdownButtonFormField<LogLevel>(
-                  initialValue: filterLevel,
+                  value: filterLevel,
                   decoration: InputDecoration(
                     labelText: '级别',
                     border: OutlineInputBorder(

@@ -98,7 +98,7 @@ class _GroupEditDialogState extends ConsumerState<GroupEditDialog> {
                     const SizedBox(height: 16),
                     // 书籍排序方式
                     DropdownButtonFormField<int>(
-                      initialValue: _bookSort,
+                      value: _bookSort,
                       decoration: const InputDecoration(
                         labelText: '书籍排序方式',
                         border: OutlineInputBorder(),
