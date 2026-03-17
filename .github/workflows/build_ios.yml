@@ -34,6 +34,13 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
 
+    - name: Create iOS project if missing
+      run: |
+        if [ ! -d "ios/Runner.xcodeproj" ]; then
+          echo "iOS project not found, creating..."
+          flutter create . --platforms ios
+        fi
+
     - name: Build iOS (device, no codesign)
       run: flutter build ios --release --no-codesign
 
