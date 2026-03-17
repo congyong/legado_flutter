@@ -569,7 +569,7 @@ class _BookSourceEditPageState extends State<BookSourceEditPage>
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<int>(
-          initialValue: _bookSourceType,
+          value: _bookSourceType,
           decoration: const InputDecoration(
             labelText: '书源类型',
             border: OutlineInputBorder(),
