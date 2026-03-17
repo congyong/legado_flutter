@@ -73,7 +73,7 @@ class CustomSwitchListTile extends StatelessWidget {
     this.tileColor,
     this.visualDensity,
     this.focusNode,
-    this.enableFeedback,
+    this.enableFeedback = true,
   });
 
   @override
